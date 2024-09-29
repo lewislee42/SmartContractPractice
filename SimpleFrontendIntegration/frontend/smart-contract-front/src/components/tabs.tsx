@@ -43,9 +43,9 @@ const SmartContractInteraction = () => {
 		}
 	};
 
-	const initializeContract = (provider, account) => {
+	const initializeContract = async (provider, account) => {
 		console.log("provider", provider);
-		const signer = provider.getSigner();
+		const signer = await provider.getSigner();
 		const contractInstance = new ethers.Contract(CONTRACT_ADDRESS, contractABI.abi, signer);
 		setContract(contractInstance);
   };
