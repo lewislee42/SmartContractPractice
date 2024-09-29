@@ -69,11 +69,11 @@ const SmartContractInteraction = () => {
 	}, []);
 
 
-	// Call the contract function (e.g., increment count)
+	// Call the contract function (e.g., increment count
 	const incrementCount = async () => {
 		if (contract) {
 			try {
-				const tx = await contract.checkOwnNote(); // This sends the transaction
+				const tx = await contract.writeNote("HELLO"); // This sends the transaction
 			} catch (error) {
 				setErrorMessage("Failed to increment count");
 				console.error(error);
@@ -87,8 +87,8 @@ const SmartContractInteraction = () => {
 	const fetchCount = async () => {
 		if (contract) {
 			try {
-				console.log(contract);
-				const count = await contract.checkOwnNote(); // This reads data from the contract
+				const count = await contract.checkNote("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"); // This reads data from the contract
+				console.log(count);
 				setCount(count.toNumber());
 			} catch (error) {
 				setErrorMessage("Failed to fetch count");
