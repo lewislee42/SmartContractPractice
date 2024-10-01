@@ -50,9 +50,9 @@ export default function Home() {
 
 
 	return (
-		<div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-			<main className="flex flex-col gap-8 row-start-2 items-center sm:items-start min-w-[50vh]">
-				<div className="flex flex-col gap-8 row-start-2 items-center sm:items-start bg-stone-100 rounded-lg p-8 drop-shadow-md min-h-[50vh] ">
+		<div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] static">
+			<main className="flex flex-col gap-8 row-start-2 items-center static">
+				<div className="flex flex-col gap-8 row-start-2 items-center bg-stone-100 rounded-lg p-8 drop-shadow-md min-h-[50vh] min-w-[60vh] static">
 					<SmartContractInteraction />
 				</div>
 			</main>
