@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import contractABI from "../Notes.json"; // ABI of your smart contract
 import ErrorPopup from "./error";
+import { IDKitWidget, VerificationLevel, ISuccessResult } from '@worldcoin/idkit'
+
 
 const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"; // Deployed contract address
 
@@ -26,6 +28,24 @@ const SmartContractInteraction = () => {
       setErrorFlag(false); // Hide the error after it's shown
     }, 5000); // Error will disappear after 5 seconds
   };
+
+	
+	const onSuccess = () => {
+		console.log("IT WORKS");
+	};
+
+	const handleVerify = async (proof: ISuccessResult) => {
+    const res = await fetch("/api/verify", { // route to your backend will depend on implementation
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(proof),
+    })
+    if (!res.ok) {
+        throw new Error("Verification failed."); // IDKit will display the error message to the user in the modal
+    }
+};
 
 	// Connect to MetaMask and set up provider and contract
 	const connectWallet = async () => {
@@ -233,7 +253,18 @@ const SmartContractInteraction = () => {
 				</div>
 			</div>
 			<div className="absolute bottom-0 left-0">
-
+				<IDKitWidget
+					app_id="app_staging_ab7060c98ec45e84bbdd3b768302aeaf" // obtained from the Developer Portal
+					action="testing-action" // obtained from the Developer Portal
+					onSuccess={onSuccess} // callback when the modal is closed
+					handleVerify={handleVerify} // callback when the proof is received
+					verification_level={VerificationLevel.Orb}
+				>
+					{({ open }) => 
+						// This is the button that will open the IDKit modal
+						<button className="text-gray-600 font-[family-name:var(--font-geist-mono)]" onClick={open}>Verify with World ID</button>
+					}
+				</IDKitWidget>
 				{errorFlag && <ErrorPopup message={errorMessage} />}
 			</div>
 		</div>

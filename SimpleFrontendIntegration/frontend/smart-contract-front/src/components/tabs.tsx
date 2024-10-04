@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import contractABI from "../Notes.json"; // ABI of your smart contract
 import ErrorPopup from "./error";
+import { IDKitWidget, VerificationLevel, ISuccessResult } from '@worldcoin/idkit'
 
-const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"; // Deployed contract address
+
+const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // Deployed contract address
 
 const SmartContractInteraction = () => {
 	const [walletAddress, setWalletAddress] = useState<string | null>(null);
@@ -21,11 +23,29 @@ const SmartContractInteraction = () => {
 	};
 
 	const triggerError = () => {
-    setErrorFlag(true);
-    setTimeout(() => {
-      setErrorFlag(false); // Hide the error after it's shown
-    }, 5000); // Error will disappear after 5 seconds
-  };
+		setErrorFlag(true);
+		setTimeout(() => {
+			setErrorFlag(false); // Hide the error after it's shown
+		}, 5000); // Error will disappear after 5 seconds
+	};
+
+	const onSuccess = () => {
+		console.log("IT WORKS");
+	};
+
+	const handleVerify = async (proof: ISuccessResult) => {
+    const res = await fetch("/api/verify", { // route to your backend will depend on implementation
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(proof),
+    })
+    if (!res.ok) {
+        throw new Error("Verification failed."); // IDKit will display the error message to the user in the modal
+    }
+};
+
 
 	// Connect to MetaMask and set up provider and contract
 	const connectWallet = async () => {
@@ -222,8 +242,8 @@ const SmartContractInteraction = () => {
 								<input type="text" value={addressValue} onChange={handleAddressTextChange} placeholder="Enter address here..." className="text-gray-600 font-[family-name:var(--font-geist-mono)] text-sm bg-stone-100 w-full px-1 py-1 border border-gray-300" />
 							</form>
 							<button className="text-gray-600 font-[family-name:var(--font-geist-mono)] rounded-md border border-solid border-transparent transition-colors flex items-center justify-center bg-neutral-200 text-background gap-2 hover:bg-[#d0d0d0] text-sm h-10 px-4"
-									onClick={fetchOwnNote}>
-									Find your own note
+								onClick={fetchOwnNote}>
+								Find your own note
 							</button>
 							<div className="text-gray-600 font-[family-name:var(--font-geist-mono)]">
 								{currentNote ? currentNote : "No notes found yet"}
@@ -234,6 +254,18 @@ const SmartContractInteraction = () => {
 			</div>
 			<div className="absolute bottom-0 left-0">
 
+				<IDKitWidget
+					app_id="app_staging_ab7060c98ec45e84bbdd3b768302aeaf" // obtained from the Developer Portal
+					action="testing-action" // obtained from the Developer Portal
+					onSuccess={onSuccess} // callback when the modal is closed
+					handleVerify={handleVerify} // callback when the proof is received
+					verification_level={VerificationLevel.Orb}
+				>
+					{({ open }) => 
+						// This is the button that will open the IDKit modal
+						<button onClick={open}>Verify with World ID</button>
+					}
+				</IDKitWidget>
 				{errorFlag && <ErrorPopup message={errorMessage} />}
 			</div>
 		</div>
