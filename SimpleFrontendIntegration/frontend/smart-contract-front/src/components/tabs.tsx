@@ -259,7 +259,8 @@ const SmartContractInteraction = () => {
 					action="testing-action" // obtained from the Developer Portal
 					onSuccess={onSuccess} // callback when the modal is closed
 					handleVerify={handleVerify} // callback when the proof is received
-					verification_level={VerificationLevel.Orb}
+					verification_level={VerificationLevel.Orb , VerificationLevel.Device}
+					description="testing lmao"
 				>
 					{({ open }) => 
 						// This is the button that will open the IDKit modal

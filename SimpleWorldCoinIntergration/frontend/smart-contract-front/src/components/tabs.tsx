@@ -35,7 +35,7 @@ const SmartContractInteraction = () => {
 	};
 
 	const handleVerify = async (proof: ISuccessResult) => {
-    const res = await fetch("/api/verify", { // route to your backend will depend on implementation
+    const res = await fetch("/api/verify/", { 
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -258,7 +258,7 @@ const SmartContractInteraction = () => {
 					action="testing-action" // obtained from the Developer Portal
 					onSuccess={onSuccess} // callback when the modal is closed
 					handleVerify={handleVerify} // callback when the proof is received
-					verification_level={VerificationLevel.Orb}
+					verification_level={VerificationLevel.Orb, VerificationLevel.Device}
 				>
 					{({ open }) => 
 						// This is the button that will open the IDKit modal
